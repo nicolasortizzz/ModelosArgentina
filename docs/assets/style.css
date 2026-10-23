@@ -122,3 +122,5 @@ footer p{margin:4px 0}
   .vt th,.vt td{padding:10px 6px}.vt th .ar{display:none}}
 
 .mx td.cheap{color:var(--up,#22c55e);font-weight:600}.mx td.rich{color:var(--dn,#ef4444);font-weight:600}.mx tr.agg td{background:var(--card2);border-top:1px solid var(--bd)}.mx tr.agg td:first-child{background:var(--card2)}.mx{min-width:1080px}
+.prb{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:600;letter-spacing:.02em;color:#f59e0b;background:color-mix(in srgb,#f59e0b 14%,transparent);border:1px solid color-mix(in srgb,#f59e0b 40%,transparent);vertical-align:1px}
+@media (max-width:560px){.prb{font-size:0;padding:0;width:8px;height:8px;margin-left:4px;background:#f59e0b;vertical-align:1px}}

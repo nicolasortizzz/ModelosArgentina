@@ -42,7 +42,7 @@ function table(){const T=$("#vt");
   const R=rows(),mx=Math.max(...Object.values(S.sum.companies).map(c=>c.monteCarlo.p90/c.price)),scale=v=>Math.min(100,v/Math.min(mx,4)*100);
   T.querySelector("tbody").innerHTML=R.length?R.map(c=>{const w=c.wacc??c.costOfEquity,h=c.revenueCagr,mc=c.monteCarlo,lo=scale(mc.p10/c.price),hi=scale(mc.p90/c.price),px=scale(1);
     return `<tr data-t="${esc(c.ticker)}" class="${c.ticker===S.sel?"sel":""}" tabindex="0">
-    <td><span class="tk">${esc(c.ticker)}</span><span class="nm" title="${esc(c.name)}">${esc(c.name)}</span></td>
+    <td><span class="tk">${esc(c.ticker)}${c.preRevenue?' <span class="prb" title="Pre-revenue: value rests on scenarios">pre-revenue</span>':""}</span><span class="nm" title="${esc(c.name)}">${esc(c.name)}</span></td>
     <td class="num">${usd(c.price)}<span class="sub${c.priceLocal!=null?"":" d"}">${c.priceLocal!=null?esc(loc(c.priceLocal,c.currencyLocal)):esc(dateFmt(c.priceDate))}</span></td>
     <td class="num">${usd(c.base)}</td><td class="num">${usd(c.probWeighted)}</td>
     <td class="num">${usd(c.comps)}${c.compsCycleAdjusted?`<span class="sub" title="Peer multiples applied to through-cycle earnings">cycle-adjusted</span>`:""}</td>
@@ -54,7 +54,7 @@ function table(){const T=$("#vt");
   $$("#vt th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;S.sort=S.sort.k===k?{k,d:-S.sort.d}:{k,d:k==="ticker"?1:-1};table()});
   $$("#vt tbody tr[data-t]").forEach(tr=>{tr.onclick=()=>detail(tr.dataset.t,true);tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();detail(tr.dataset.t,true)}}});
   const fx=S.sum.fx||{};
-  $("#vtFoot").innerHTML=`Prices: last close in the snapshot. Local listings converted at official rates: KRW ${nf(2).format(fx.KRWUSD)} per USD (ECB reference-rate cross, ${dateFmt(fx.KRW_date)}); ADR financials in TWD at ${nf(3).format(fx.TWDUSD)} (CBC, ${dateFmt(fx.TWD_date)}), EUR at ${nf(4).format(fx.EURUSD_ecb)} USD (ECB, ${dateFmt(fx.EUR_date)}), BRL at ${nf(4).format(fx.BRLUSD)} (BCB PTAX, ${dateFmt(fx.BRL_date)}). Monte Carlo bar: P10–P90 of 4,000 runs relative to the price (marker).`}
+  $("#vtFoot").innerHTML=`Prices: last close in the snapshot. Local listings converted at official rates: KRW ${nf(2).format(fx.KRWUSD)} per USD (ECB reference-rate cross, ${dateFmt(fx.KRW_date)}); ADR financials in TWD at ${nf(3).format(fx.TWDUSD)} (CBC, ${dateFmt(fx.TWD_date)}), EUR at ${nf(4).format(fx.EURUSD_ecb)} USD (ECB, ${dateFmt(fx.EUR_date)}), BRL at ${nf(4).format(fx.BRLUSD)} (BCB PTAX, ${dateFmt(fx.BRL_date)})${fx.CADUSD?`, CAD at ${nf(4).format(fx.CADUSD)} (Bank of Canada, ${dateFmt(fx.CAD_date)})`:""}. Regulated utilities and banks: residual income on book value (cost of equity shown); BEP: dividend-discount model. Monte Carlo bar: P10–P90 of 4,000 runs relative to the price (marker).`}
 
 const PL=()=>({paper_bgcolor:"rgba(0,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",font:{family:"Inter, system-ui, sans-serif",size:12.5,color:css("--tx")},margin:{l:10,r:16,t:8,b:36},
   xaxis:{gridcolor:css("--bd"),zerolinecolor:css("--bd"),linecolor:css("--bd"),automargin:true,tickfont:{color:css("--mu")}},yaxis:{gridcolor:css("--bd"),zerolinecolor:css("--bd"),automargin:true,tickfont:{color:css("--mu")}},
