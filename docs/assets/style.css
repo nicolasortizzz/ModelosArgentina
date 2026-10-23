@@ -120,3 +120,5 @@ footer p{margin:4px 0}
 @media (max-width:760px){#wb{display:none}.wb-mobile{display:flex}#wbExt{display:none}
   .vt td:nth-child(2) .sub.d{display:none}.nm{max-width:96px}.vt{font-size:13px}.tk{font-size:12px}
   .vt th,.vt td{padding:10px 6px}.vt th .ar{display:none}}
+
+.mx td.cheap{color:var(--up,#22c55e);font-weight:600}.mx td.rich{color:var(--dn,#ef4444);font-weight:600}.mx tr.agg td{background:var(--card2);border-top:1px solid var(--bd)}.mx tr.agg td:first-child{background:var(--card2)}.mx{min-width:1080px}

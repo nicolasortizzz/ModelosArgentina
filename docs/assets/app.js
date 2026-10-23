@@ -23,7 +23,7 @@ async function load(){
   S.sum=sum;S.models=models;
   const sec={};models.models.forEach(m=>{if(m.file!=="modeloTodosCedears.ipynb")m.tickers.forEach(t=>(sec[t]=sec[t]||[]).push(m.name))});S.sec=sec;
   const h=location.hash.match(/^#valuation\/(.+)$/);S.sel=h&&sum.companies[decodeURIComponent(h[1])]?decodeURIComponent(h[1]):"000660.KS" in sum.companies?"000660.KS":sum.tickers[0];
-  kpis();table();models_();docs();wbInit();detail(S.sel,false);upChart();
+  kpis();table();mxInit();models_();docs();wbInit();detail(S.sel,false);upChart();
   $("#asof").textContent=`Valuation snapshot ${dateFmt(sum.generatedAt)} · sector catalogue ${dateFmt(models.generatedAt)}`;
 }
 function kpis(){const C=Object.values(S.sum.companies),fx=S.sum.fx||{},under=C.filter(c=>c.upside>0).length,med=C.map(c=>c.upside).sort((a,b)=>a-b)[C.length>>1];
@@ -117,6 +117,18 @@ function models_(){const M=S.models,V=S.sum.companies,W=M.weights,mx=Math.max(..
   $$("#mGrid button.chip").forEach(b=>b.onclick=()=>{detail(b.dataset.t,false);$("#valuation").scrollIntoView({behavior:"smooth"})})}
 function docs(){$("#dGrid").innerHTML=S.models.documents.map(d=>`<article class="card doc"><div class="ico">PDF</div><h3>${esc(d.title)}</h3><p>${esc(d.description)} · ${nf(0).format(d.sizeKB)} KB</p>
   <div class="links"><a href="${d.url}" target="_blank" rel="noopener">Open ↗</a><a href="${d.raw}">Download</a></div></article>`).join("")}
+
+const MXC=[["evEbitda","EV / EBITDA","x",1],["pe","P/E","x",1],["fpe","Fwd P/E","x",1],["pfcf","P / FCF","x",1],["fcfY","FCF yield","%",-1],["divY","Div. yield","%",-1],["ndE","Net debt / EBITDA","x",0],["pb","P / B","x",1]];
+const mxf=(v,u)=>v==null||!isFinite(v)?"—":u==="%"?pct(v):nf(1).format(v)+"x";
+function mxInit(){const C=S.sum.companies,G=[...new Set(Object.values(C).map(c=>c.group).filter(Boolean))].sort(),s=$("#mxG");if(!s||!G.length){$("#multiples")?.setAttribute("hidden","");return}
+  s.innerHTML=`<option value="">All sectors</option>`+G.map(g=>`<option>${esc(g)}</option>`).join("");const g0=C[S.sel]?.group;s.value=g0&&G.includes(g0)?g0:"";s.onchange=mxTable;mxTable()}
+function mxTable(){const C=S.sum.companies,g=$("#mxG").value,L=Object.values(C).filter(c=>c.multiples&&(!g||c.group===g)).sort((a,b)=>(a.group||"").localeCompare(b.group||"")||(a.multiples.evEbitda??1e9)-(b.multiples.evEbitda??1e9));
+  $("#mxT thead").innerHTML="<tr><th scope=\"col\">Company</th>"+(g?"":"<th scope=\"col\">Sector</th>")+MXC.map(([,l])=>`<th scope="col">${l}</th>`).join("")+"<th scope=\"col\">Upside</th></tr>";
+  const cls=(c,k,d)=>{const v=c.multiples[k],m=c.groupMultiples?.[k]?.med;if(v==null||m==null||!d||c.groupMultiples.members.length<3)return"";if(d>0&&v<=0)return"";const r=v/m;return(d>0?r<.85:r>1.15)?"cheap":(d>0?r>1.15:r<.85)?"rich":""};
+  let body=L.map(c=>`<tr data-t="${esc(c.ticker)}" tabindex="0"><td><span class="tk">${esc(c.ticker)}</span><span class="nm">${esc(c.name)}</span></td>${g?"":`<td class="muted">${esc(c.group||"")}</td>`}`+MXC.map(([k,,u,d])=>`<td class="num ${cls(c,k,d)}">${mxf(c.multiples[k],u)}</td>`).join("")+`<td class="num"><span class="pill ${c.upside>=0?"up":"dn"}">${spct(c.upside)}</span></td></tr>`).join("");
+  const gm=g&&L[0]?.groupMultiples;if(gm)body+=["med","mean"].map(s=>`<tr class="agg"><td><b>Sector ${s==="med"?"median":"mean"}</b><span class="nm">${gm.members.length} names</span></td>`+MXC.map(([k,,u])=>`<td class="num">${mxf(gm[k]?.[s],u)}</td>`).join("")+"<td></td></tr>").join("");
+  $("#mxT tbody").innerHTML=body;$$("#mxT tbody tr[data-t]").forEach(tr=>{tr.onclick=()=>{detail(tr.dataset.t,true)}});
+  $("#mxFoot").textContent="EV = market cap + net debt + minority interest; EBITDA trailing twelve months; FCF and dividends from the last fiscal-year cash-flow statement; forward P/E on next-fiscal-year consensus EPS; all in USD at the official rates above. Negative multiples shown as reported but not coloured. Banks: EV-based ratios not meaningful. Source: dashboard data/multiples.json."}
 
 function redraw(){if(!S.sum)return;detail(S.sel,false);upChart();const f=$("#wb");if(f.src)wbLoad($("#wbTk").value)}
 $("#theme").onclick=()=>{const r=document.documentElement;r.dataset.theme=theme()==="dark"?"light":"dark";try{localStorage.setItem("ma-theme",r.dataset.theme)}catch(e){}

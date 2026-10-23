@@ -18,7 +18,7 @@
 <header class="top">
   <div class="wrap top-in">
     <a class="brand" href="#top" aria-label="Modelos Argentina home"><img src="assets/favicon.svg" alt="" width="34" height="34"><span><b>Modelos Argentina</b><small>CEDEAR models &amp; valuation</small></span></a>
-    <nav class="nav" aria-label="Sections"><a href="#valuation">Valuation</a><a href="#workbench">Workbench</a><a href="#models">Sector models</a><a href="#docs">Documents</a></nav>
+    <nav class="nav" aria-label="Sections"><a href="#valuation">Valuation</a><a href="#multiples">Multiples</a><a href="#workbench">Workbench</a><a href="#models">Sector models</a><a href="#docs">Documents</a></nav>
     <div class="actions">
       <button id="theme" class="icon" type="button" aria-label="Toggle light / dark theme" title="Toggle theme"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg></button>
       <a class="icon" href="https://github.com/nicolasortizzz/ModelosArgentina" target="_blank" rel="noopener" aria-label="GitHub repository" title="GitHub repository"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg></a>
@@ -54,6 +54,12 @@
       <div class="card"><div class="card-h"><h3 id="dWTitle">WACC history</h3><a class="btn" id="dOpen" href="#workbench">Open in workbench →</a></div><div id="dWacc" class="chart" role="img" aria-label="WACC history"></div><p class="muted small" id="dNote"></p></div>
     </div>
     <div class="card"><div class="card-h"><h3>Triangulated value vs price</h3><span class="muted small">60% probability-weighted DCF + 40% comps · banks: residual income + P/BV</span></div><div id="upChart" class="chart tall" role="img" aria-label="Implied upside by company"></div></div>
+  </section>
+
+  <section id="multiples" class="wrap sec">
+    <div class="sec-h"><div><h2>Valuation multiples</h2><p class="muted" id="mxSub">Every covered company against its sector: green is cheaper than the sector median by more than 15%, red is richer.</p></div>
+      <div class="tools"><label class="select"><span class="sr">Sector</span><select id="mxG" aria-label="Sector shown in the multiples table"></select></label></div></div>
+    <div class="card"><div class="tbl-scroll"><table id="mxT" class="vt mx"><thead></thead><tbody></tbody></table></div><p class="foot muted small" id="mxFoot"></p></div>
   </section>
 
   <section id="workbench" class="wrap sec">
